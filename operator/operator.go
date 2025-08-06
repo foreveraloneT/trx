@@ -68,6 +68,14 @@ func WithSerialize() Option {
 	}
 }
 
+// WithContext returns an Option that sets the provided context on the operator's configuration.
+// When the given context is canceled, any ongoing operation such as `Map` will be stopped (without error).
+func WithContext(ctx context.Context) Option {
+	return func(c *config) {
+		c.ctx = ctx
+	}
+}
+
 func defaultConfig() *config {
 	return &config{
 		bufferSize: 0,

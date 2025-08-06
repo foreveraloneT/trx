@@ -4,35 +4,45 @@ import "github.com/foreveraloneT/trx"
 
 // Map transforms the values from the source channel using the mapper function
 func Map[T, U any](source <-chan trx.Result[T], mapper func(value T, index int) (U, error), options ...Option) <-chan trx.Result[U] {
-	_, out, pool := prepareResources[U](options...)
+	ctx, out, pool := prepareResources[U](options...)
 
 	go func() {
 		defer close(out)
 
 		i := 0
-		for v := range source {
-			index := i
-			result := v
-
-			pool.submit(func() {
-				value, err := result.Get()
-				if err != nil {
-					out <- trx.Err[U](err)
-
-					return
+	LOOP:
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case v, ok := <-source:
+				if !ok {
+					break LOOP
 				}
 
-				mapped, err := mapper(value, index)
-				if err != nil {
-					out <- trx.Err[U](err)
+				index := i
+				result := v
 
-					return
-				}
+				pool.submit(func() {
+					value, err := result.Get()
+					if err != nil {
+						out <- trx.Err[U](err)
 
-				out <- trx.Ok(mapped)
-			})
+						return
+					}
 
-			i++
+					mapped, err := mapper(value, index)
+					if err != nil {
+						out <- trx.Err[U](err)
+
+						return
+					}
+
+					out <- trx.Ok(mapped)
+				})
+
+				i++
+			}
 		}
 
 		pool.wait()
@@ -44,25 +54,35 @@ func Map[T, U any](source <-chan trx.Result[T], mapper func(value T, index int) 
 // BufferCount buffers the source channel values until the buffer size is reached, then emits the buffer and starts a new buffer.
 // Unable to use with `WithPoolSize`
 func BufferCount[T any](source <-chan trx.Result[T], n int, options ...Option) <-chan trx.Result[[]T] {
-	_, out, _ := prepareResources[[]T](options...)
+	ctx, out, _ := prepareResources[[]T](options...)
 
 	go func() {
 		defer close(out)
 
 		buffer := make([]T, 0, n)
-		for v := range source {
-			value, err := v.Get()
-			if err != nil {
-				out <- trx.Err[[]T](err)
-
+	LOOP:
+		for {
+			select {
+			case <-ctx.Done():
 				return
-			}
+			case v, ok := <-source:
+				if !ok {
+					break LOOP
+				}
 
-			buffer = append(buffer, value)
-			if len(buffer) == n {
-				out <- trx.Ok(buffer)
+				value, err := v.Get()
+				if err != nil {
+					out <- trx.Err[[]T](err)
 
-				buffer = make([]T, 0, n)
+					return
+				}
+
+				buffer = append(buffer, value)
+				if len(buffer) == n {
+					out <- trx.Ok(buffer)
+
+					buffer = make([]T, 0, n)
+				}
 			}
 		}
 
