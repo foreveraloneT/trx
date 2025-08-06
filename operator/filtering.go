@@ -2,7 +2,37 @@ package operator
 
 import "github.com/foreveraloneT/trx"
 
-// Filter emits values from the source channel that pass the predicate function
+// Filter emits only those values from the source channel for which the predicate function returns true.
+// The predicate receives each value and its index, and may return an error. If an error occurs during
+// filtering or when retrieving the value from the source, the error is sent downstream wrapped in a trx.Result.
+//
+// The function supports optional configuration via Option parameters, such as context control and concurrency
+// settings. Filtering operations are performed concurrently using a worker pool, and the output channel is
+// closed once all filtering operations are complete.
+//
+// Type Parameters:
+//
+//	T - The type of input values from the source channel.
+//
+// Parameters:
+//
+//	source   - A receive-only channel of trx.Result[T] representing the input stream.
+//	predicate - A function that determines if a value and its index should be included, possibly returning an error.
+//	options
+//	    - WithBufferSize
+//	    - WithPoolSize
+//	    - WithSerialize
+//	    - WithContext
+//
+// Returns:
+//
+//	A receive-only channel of trx.Result[T] containing the filtered results or errors.
+//
+// Example usage:
+//
+//	out := Filter(source, func(v int, i int) (bool, error) {
+//	    return v%2 == 0, nil // filter even numbers
+//	})
 func Filter[T any](source <-chan trx.Result[T], predicate func(value T, index int) (bool, error), options ...Option) <-chan trx.Result[T] {
 	ctx, out, pool := prepareResources[T](options...)
 
