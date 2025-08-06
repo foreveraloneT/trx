@@ -4,14 +4,19 @@
 // in concurrent operations.
 package operator
 
-import "github.com/foreveraloneT/trx"
+import (
+	"context"
+
+	"github.com/foreveraloneT/trx"
+)
 
 // config holds configuration options for channel creation.
 // This struct is used internally to store settings provided through functional options.
 type config struct {
-	bufferSize int // Size of the channel buffer (0 = unbuffered)
-	poolSize   int // Number of worker goroutines in the pool (must be > 0)
-	serialize  bool
+	bufferSize int  // Size of the channel buffer (0 = unbuffered)
+	poolSize   int  // Number of worker goroutines in the pool (must be > 0)
+	serialize  bool // Serialize output when poolSize >= 1
+	ctx        context.Context
 }
 
 // Option represents an option for the channel utility.
@@ -36,6 +41,14 @@ func WithBufferSize(size int) Option {
 	}
 }
 
+// WithPoolSize returns an Option that sets the pool size in the operator configuration.
+// If the provided size is greater than 0, it updates the pool size; otherwise, it leaves it unchanged.
+//
+// Example:
+//
+//	WithPoolSize(5) // Sets the pool size to 5 worker goroutines
+//	WithPoolSize(1) // Sets the pool size to 1 (default)
+//	WithPoolSize(0) // Invalid, pool size remains unchanged (default is 1)
 func WithPoolSize(size int) Option {
 	return func(c *config) {
 		if size > 0 {
@@ -44,6 +57,11 @@ func WithPoolSize(size int) Option {
 	}
 }
 
+// WithSerialize returns an Option that enables serialization in the operator configuration.
+//
+// Example:
+//
+//	WithSerialize() // Enables serialization in the operator
 func WithSerialize() Option {
 	return func(c *config) {
 		c.serialize = true
@@ -68,14 +86,27 @@ func parseOption(opts ...Option) *config {
 	return c
 }
 
-func makeResultChannel[T any](opts ...Option) chan trx.Result[T] {
-	c := parseOption(opts...)
-
+func makeResultChannel[T any](c *config) chan trx.Result[T] {
 	return make(chan trx.Result[T], c.bufferSize)
 }
 
-func makePool(opts ...Option) *pool {
-	c := parseOption(opts...)
-
+func makePool(c *config) *pool {
 	return newPool(c.poolSize, c.serialize)
+}
+
+func makeContext(c *config) context.Context {
+	if c.ctx != nil {
+		return c.ctx
+	}
+
+	return context.Background()
+}
+
+func prepareResources[T any](opts ...Option) (ctx context.Context, out chan trx.Result[T], pool *pool) {
+	c := parseOption(opts...)
+	ctx = makeContext(c)
+	out = makeResultChannel[T](c)
+	pool = makePool(c)
+
+	return
 }

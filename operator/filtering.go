@@ -4,8 +4,7 @@ import "github.com/foreveraloneT/trx"
 
 // Filter emits values from the source channel that pass the predicate function
 func Filter[T any](source <-chan trx.Result[T], predicate func(value T, index int) (bool, error), options ...Option) <-chan trx.Result[T] {
-	out := makeResultChannel[T](options...)
-	pool := makePool(options...)
+	_, out, pool := prepareResources[T](options...)
 
 	go func() {
 		defer close(out)

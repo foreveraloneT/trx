@@ -4,8 +4,7 @@ import "github.com/foreveraloneT/trx"
 
 // Map transforms the values from the source channel using the mapper function
 func Map[T, U any](source <-chan trx.Result[T], mapper func(value T, index int) (U, error), options ...Option) <-chan trx.Result[U] {
-	out := makeResultChannel[U](options...)
-	pool := makePool(options...)
+	_, out, pool := prepareResources[U](options...)
 
 	go func() {
 		defer close(out)
@@ -45,7 +44,7 @@ func Map[T, U any](source <-chan trx.Result[T], mapper func(value T, index int) 
 // BufferCount buffers the source channel values until the buffer size is reached, then emits the buffer and starts a new buffer.
 // Unable to use with `WithPoolSize`
 func BufferCount[T any](source <-chan trx.Result[T], n int, options ...Option) <-chan trx.Result[[]T] {
-	out := makeResultChannel[[]T](options...)
+	_, out, _ := prepareResources[[]T](options...)
 
 	go func() {
 		defer close(out)
