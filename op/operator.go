@@ -1,8 +1,8 @@
-// Package operator provides utilities for working with channels in Go.
+// Package op provides utilities for working with channels in Go.
 // It offers a simple, configurable way to create typed channels with optional buffering,
 // specifically designed to work with trx.Result types for type-safe error handling
 // in concurrent operations.
-package operator
+package op
 
 import (
 	"context"

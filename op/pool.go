@@ -1,4 +1,4 @@
-package operator
+package op
 
 import (
 	basePool "github.com/sourcegraph/conc/pool"

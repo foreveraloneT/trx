@@ -1,4 +1,4 @@
-package operator
+package op
 
 import "github.com/foreveraloneT/trx"
 
