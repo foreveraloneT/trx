@@ -10,22 +10,30 @@ type pool struct {
 	stream *stream.Stream
 }
 
-func (p *pool) submit(fn func()) {
+type callback = func()
+
+func (p *pool) submit(fn func() callback) {
 	if p.pool != nil {
-		p.pool.Go(fn)
+		p.pool.Go(func() {
+			cb := fn()
+			cb()
+		})
 
 		return
 	}
 
 	if p.stream != nil {
 		p.stream.Go(func() stream.Callback {
-			return fn
+			cb := fn()
+
+			return cb
 		})
 
 		return
 	}
 
-	fn()
+	cb := fn()
+	cb()
 }
 
 func (p *pool) wait() {

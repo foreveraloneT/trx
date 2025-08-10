@@ -56,24 +56,28 @@ func Filter[T any](source <-chan trx.Result[T], predicate func(value T, index in
 				index := i
 				result := v
 
-				pool.submit(func() {
+				pool.submit(func() callback {
 					value, err := result.Get()
 					if err != nil {
-						out <- trx.Err[T](err)
-
-						return
+						return func() {
+							out <- trx.Err[T](err)
+						}
 					}
 
 					ok, err := predicate(value, index)
 					if err != nil {
-						out <- trx.Err[T](err)
-
-						return
+						return func() {
+							out <- trx.Err[T](err)
+						}
 					}
 
 					if ok {
-						out <- trx.Ok(value)
+						return func() {
+							out <- trx.Ok(value)
+						}
 					}
+
+					return func() {}
 				})
 
 				i++

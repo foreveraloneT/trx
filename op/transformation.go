@@ -58,22 +58,25 @@ func Map[T, U any](source <-chan trx.Result[T], mapper func(value T, index int) 
 				index := i
 				result := v
 
-				pool.submit(func() {
+				pool.submit(func() callback {
 					value, err := result.Get()
 					if err != nil {
-						out <- trx.Err[U](err)
+						return func() {
+							out <- trx.Err[U](err)
+						}
 
-						return
 					}
 
 					mapped, err := mapper(value, index)
 					if err != nil {
-						out <- trx.Err[U](err)
-
-						return
+						return func() {
+							out <- trx.Err[U](err)
+						}
 					}
 
-					out <- trx.Ok(mapped)
+					return func() {
+						out <- trx.Ok(mapped)
+					}
 				})
 
 				i++
