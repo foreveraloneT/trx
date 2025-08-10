@@ -36,7 +36,10 @@ import "github.com/foreveraloneT/trx"
 //	    return strconv.Itoa(v), nil
 //	})
 func Map[T, U any](source <-chan trx.Result[T], mapper func(value T, index int) (U, error), options ...Option) <-chan trx.Result[U] {
-	ctx, out, pool := prepareResources[U](options...)
+	conf := parseOption(options...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[U](conf)
+	pool := makePool(conf)
 
 	go func() {
 		defer close(out)
@@ -109,7 +112,9 @@ func Map[T, U any](source <-chan trx.Result[T], mapper func(value T, index int) 
 //
 //	out := BufferCount(source, 3, WithBufferSize(10), WithContext(ctx))
 func BufferCount[T any](source <-chan trx.Result[T], n int, options ...Option) <-chan trx.Result[[]T] {
-	ctx, out, _ := prepareResources[[]T](options...)
+	conf := parseOption(options...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[[]T](conf)
 
 	go func() {
 		defer close(out)

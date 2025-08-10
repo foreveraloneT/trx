@@ -109,12 +109,3 @@ func makeContext(c *config) context.Context {
 
 	return context.Background()
 }
-
-func prepareResources[T any](opts ...Option) (ctx context.Context, out chan trx.Result[T], pool *pool) {
-	c := parseOption(opts...)
-	ctx = makeContext(c)
-	out = makeResultChannel[T](c)
-	pool = makePool(c)
-
-	return
-}

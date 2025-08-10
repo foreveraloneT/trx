@@ -28,7 +28,9 @@ import (
 //
 //	out := Timer(2 * time.Second)
 func Timer(d time.Duration, options ...Option) <-chan trx.Result[int] {
-	ctx, out, _ := prepareResources[int]()
+	conf := parseOption(options...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[int](conf)
 
 	go func() {
 		defer close(out)
@@ -66,7 +68,9 @@ func Timer(d time.Duration, options ...Option) <-chan trx.Result[int] {
 //
 //	out := Interval(1 * time.Second)
 func Interval(d time.Duration, options ...Option) <-chan trx.Result[int] {
-	ctx, out, _ := prepareResources[int]()
+	conf := parseOption(options...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[int](conf)
 
 	go func() {
 		defer close(out)
@@ -109,7 +113,9 @@ func Interval(d time.Duration, options ...Option) <-chan trx.Result[int] {
 //
 //	out := FormSlice([]int{1, 2, 3})
 func FormSlice[T any](source []T, options ...Option) <-chan trx.Result[T] {
-	ctx, out, _ := prepareResources[T](options...)
+	conf := parseOption(options...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[T](conf)
 
 	go func() {
 		defer close(out)
@@ -145,7 +151,9 @@ func FormSlice[T any](source []T, options ...Option) <-chan trx.Result[T] {
 func FormChannel[T any](source <-chan T, options ...Option) <-chan trx.Result[T] {
 	opts := append([]Option{WithBufferSize(cap(source))}, options...)
 
-	ctx, out, _ := prepareResources[T](opts...)
+	conf := parseOption(opts...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[T](conf)
 
 	go func() {
 		defer close(out)
@@ -189,7 +197,9 @@ func FormChannel[T any](source <-chan T, options ...Option) <-chan trx.Result[T]
 //
 //	out := Range(0, 5)
 func Range(start int, count int, options ...Option) <-chan trx.Result[int] {
-	ctx, out, _ := prepareResources[int](options...)
+	conf := parseOption(options...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[int](conf)
 
 	go func() {
 		defer close(out)

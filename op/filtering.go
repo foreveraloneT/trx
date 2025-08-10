@@ -34,7 +34,10 @@ import "github.com/foreveraloneT/trx"
 //	    return v%2 == 0, nil // filter even numbers
 //	})
 func Filter[T any](source <-chan trx.Result[T], predicate func(value T, index int) (bool, error), options ...Option) <-chan trx.Result[T] {
-	ctx, out, pool := prepareResources[T](options...)
+	conf := parseOption(options...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[T](conf)
+	pool := makePool(conf)
 
 	go func() {
 		defer close(out)
@@ -113,7 +116,9 @@ func Filter[T any](source <-chan trx.Result[T], predicate func(value T, index in
 //	    // handle res
 //	}
 func Take[T any](source <-chan trx.Result[T], n int, options ...Option) <-chan trx.Result[T] {
-	ctx, out, _ := prepareResources[T](options...)
+	conf := parseOption(options...)
+	ctx := makeContext(conf)
+	out := makeResultChannel[T](conf)
 
 	go func() {
 		defer close(out)
