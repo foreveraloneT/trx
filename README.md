@@ -1,6 +1,6 @@
 # trx
 
-[![Release](https://img.shields.io/badge/release-v0.1.1-blue.svg)](https://github.com/foreveraloneT/trx/releases/tag/v0.1.1)
+[![Release](https://img.shields.io/badge/release-v0.1.2-blue.svg)](https://github.com/foreveraloneT/trx/releases/tag/v0.1.2)
 [![Go Reference](https://pkg.go.dev/badge/github.com/foreveralonet/trx.svg)](https://pkg.go.dev/github.com/foreveralonet/trx)
 [![Go Report Card](https://goreportcard.com/badge/github.com/foreveralonet/trx)](https://goreportcard.com/report/github.com/foreveralonet/trx)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -17,7 +17,7 @@ A Go library that provides utilities for handling channels with Rust-like Result
 ## Installation
 
 ```bash
-go get github.com/foreveraloneT/trx
+go get github.com/foreveralonet/trx
 ```
 
 ## Quick Start
@@ -29,7 +29,7 @@ package main
 
 import (
     "fmt"
-    "github.com/foreveraloneT/trx"
+    "github.com/foreveralonet/trx"
 )
 
 func divide(a, b int) trx.Result[int] {
@@ -62,7 +62,7 @@ package main
 import (
     "fmt"
     "time"
-    "github.com/foreveraloneT/trx/op"
+    "github.com/foreveralonet/trx/op"
 )
 
 func main() {
