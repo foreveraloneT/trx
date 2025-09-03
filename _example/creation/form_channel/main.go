@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/foreveraloneT/trx/op"
+	"github.com/foreveralonet/trx/op"
 )
 
 func main() {

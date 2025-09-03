@@ -7,7 +7,7 @@ package op
 import (
 	"context"
 
-	"github.com/foreveraloneT/trx"
+	"github.com/foreveralonet/trx"
 )
 
 // config holds configuration options for channel creation.

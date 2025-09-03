@@ -3,7 +3,7 @@ package op
 import (
 	"time"
 
-	"github.com/foreveraloneT/trx"
+	"github.com/foreveralonet/trx"
 )
 
 // Map applies the provided mapper function to each item received from the source channel,

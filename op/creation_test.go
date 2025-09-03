@@ -6,7 +6,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/foreveraloneT/trx/op"
+	"github.com/foreveralonet/trx/op"
 )
 
 var _ = Describe("Creation Operations", func() {

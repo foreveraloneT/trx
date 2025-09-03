@@ -1,6 +1,6 @@
 package op
 
-import "github.com/foreveraloneT/trx"
+import "github.com/foreveralonet/trx"
 
 // Filter emits only those values from the source channel for which the predicate function returns true.
 // The predicate receives each value and its index, and may return an error. If an error occurs during

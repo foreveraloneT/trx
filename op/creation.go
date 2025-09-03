@@ -3,7 +3,7 @@ package op
 import (
 	"time"
 
-	"github.com/foreveraloneT/trx"
+	"github.com/foreveralonet/trx"
 )
 
 // Timer emits a single trx.Result[int] after the specified duration d has elapsed.

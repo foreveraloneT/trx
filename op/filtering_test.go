@@ -6,8 +6,8 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/foreveraloneT/trx"
-	"github.com/foreveraloneT/trx/op"
+	"github.com/foreveralonet/trx"
+	"github.com/foreveralonet/trx/op"
 )
 
 var _ = Describe("Filtering Operations", func() {

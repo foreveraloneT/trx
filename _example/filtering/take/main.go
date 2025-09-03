@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/foreveraloneT/trx/op"
+	"github.com/foreveralonet/trx/op"
 )
 
 func main() {
