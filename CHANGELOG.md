@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2025-09-03
+
+### Changed
+- **Documentation**: Updated README.md to reflect the new module name consistently
+  - Updated installation instructions to use `github.com/foreveralonet/trx`
+  - Updated import statements in code examples to use the new module name
+  - Updated all URLs and references to use the correct module path
+
+### Fixed
+- **Import Consistency**: Fixed remaining import statements in documentation examples that were still using the old module name
+
 ## [0.1.1] - 2025-09-03
 
 ### Added
