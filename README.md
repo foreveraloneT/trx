@@ -1,8 +1,8 @@
 # trx
 
-[![Release](https://img.shields.io/badge/release-v0.1.0-blue.svg)](https://github.com/foreveraloneT/trx/releases/tag/v0.1.0)
-[![Go Reference](https://pkg.go.dev/badge/github.com/foreveraloneT/trx.svg)](https://pkg.go.dev/github.com/foreveraloneT/trx)
-[![Go Report Card](https://goreportcard.com/badge/github.com/foreveraloneT/trx)](https://goreportcard.com/report/github.com/foreveraloneT/trx)
+[![Release](https://img.shields.io/badge/release-v0.1.1-blue.svg)](https://github.com/foreveraloneT/trx/releases/tag/v0.1.1)
+[![Go Reference](https://pkg.go.dev/badge/github.com/foreveralonet/trx.svg)](https://pkg.go.dev/github.com/foreveralonet/trx)
+[![Go Report Card](https://goreportcard.com/badge/github.com/foreveralonet/trx)](https://goreportcard.com/report/github.com/foreveralonet/trx)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A Go library that provides utilities for handling channels with Rust-like Result types and reactive programming patterns. It combines type-safe error handling with powerful channel operations for building robust concurrent applications.
