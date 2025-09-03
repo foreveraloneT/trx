@@ -1,5 +1,6 @@
 # trx
 
+[![Release](https://img.shields.io/badge/release-v0.1.0-blue.svg)](https://github.com/foreveraloneT/trx/releases/tag/v0.1.0)
 [![Go Reference](https://pkg.go.dev/badge/github.com/foreveraloneT/trx.svg)](https://pkg.go.dev/github.com/foreveraloneT/trx)
 [![Go Report Card](https://goreportcard.com/badge/github.com/foreveraloneT/trx)](https://goreportcard.com/report/github.com/foreveraloneT/trx)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
